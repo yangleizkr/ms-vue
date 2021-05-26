@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yl.ms.dao.SysMenuMapper">
+  <resultMap id="BaseResultMap" type="com.yl.ms.entity.SysMenu">
+    <!--@mbg.generated-->
+    <!--@Table sys_menu-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="menu_code" jdbcType="VARCHAR" property="menuCode" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
+    <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
+    <result column="pre_code" jdbcType="VARCHAR" property="preCode" />
+    <result column="next_code" jdbcType="VARCHAR" property="nextCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, menu_code, menu_name, menu_url, parent_code, pre_code, next_code
+  </sql>
+
+  <select id="selectAllByMenuCode" resultMap="BaseResultMap">
+        select * from sys_menu where menu_code = '123'
+  </select>
+</mapper>
