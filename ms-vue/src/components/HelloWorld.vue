@@ -63,6 +63,10 @@ export default {
                   message:response.data.mes
                 })
                 this.$router.push("/main");
+
+                sessionStorage.setItem("userName",response.data.sysUser.userName);
+                // sessionStorage.setItem("sysUserAvatar",response.data.sysUser.avatar);
+
               }else {
                 this.$message.error(response.data.mes)
               }

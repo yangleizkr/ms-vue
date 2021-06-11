@@ -10,13 +10,10 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="search">查询</el-button>
+        <el-button type="primary" @click="showDialog">新增用户</el-button>
       </el-form-item>
     </el-form>
-    <el-row>
-      <el-col :span="4">
-        <el-button icon="el-icon-circle-plus" @click="showDialog">新增用户</el-button>
-      </el-col>
-    </el-row>
+
 
 
     <el-table
@@ -67,11 +64,23 @@
         width="130">
         <template #default="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button type="text" size="small" @click="modifyUser(scope.row,true)">编辑</el-button>
           <el-button @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
+
     </el-table>
+    <div class="block">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage4"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
       <el-form :model="AddUserForm">
         <el-form-item label="编码" :label-width="formLabelWidth">
@@ -97,7 +106,7 @@
       <template #footer>
     <span class="dialog-footer">
       <el-button @click="open = false">取 消</el-button>
-      <el-button type="primary" @click="addUser">确 定</el-button>
+      <el-button type="primary" @click="submitForm">提 交</el-button>
     </span>
       </template>
     </el-dialog>
@@ -119,9 +128,11 @@
           userCode: '',
           userName: ''
         },
+        flag: false,
         AddUserForm: {
           userCode: '',
           userName: '',
+          password:'',
           address: '',
           email: '',
           mobile: '',
@@ -129,29 +140,44 @@
         userData: [],
         title: '',
         open: false,
-        userList: ''
+        userList: '',
+        currentPage4:1,
+        total:0,
+        pageInfo:[]
       }
     },
-    created() {
-      axios.get('/sys_user/list', {
-        params: {
-          userCode: this.form.userCode,
-          userName: this.form.userName
-        }
-      }).then(res => {
-        this.userData = res.data.userList;
-      })
+    mounted() {
+      this.search();
     },
     methods: {
+      reset(){
+        this.AddUserForm.userCode = undefined
+        this.AddUserForm.userName = undefined
+        this.AddUserForm.password = undefined
+        this.AddUserForm.address = undefined
+        this.AddUserForm.email = undefined
+        this.AddUserForm.mobile = undefined
+      },
       search() {
         axios.get('/sys_user/list', {
           params: {
             userCode: this.form.userCode,
-            userName: this.form.userName
+            userName: this.form.userName,
+            pageNum : this.pageNum,
+            pageSize: this.pageSize
           }
         }).then(res => {
-          this.userData = res.data.userList;
+          this.userData = res.data.iPage.records;
+          this.total = res.data.iPage.total;
         })
+      },
+      handleSizeChange(val) {
+        this.pageSize = val;
+        this.search();
+      },
+      handleCurrentChange(val) {
+        this.pageNum = val;
+        this.search();
       },
       handleCheck(row) {
         if (row.check == true) {
@@ -185,13 +211,26 @@
         }
       },
       showDialog() {
+        this.reset()
         this.open = true;
         this.title = "新增用户"
+        this.flag = false;
+      },
+      modifyUser(row) {
+        this.reset()
+        this.open = true;
+        this.title = "修改用户";
+        this.AddUserForm.userCode = row.userCode
+        this.AddUserForm.userName = row.userName
+        this.AddUserForm.password = row.password
+        this.AddUserForm.address = row.address
+        this.AddUserForm.email = row.email
+        this.AddUserForm.mobile = row.mobile
+        this.flag = true;
       },
       handleClick(row) {
-        alert(row.id + "  " + row.userName)
+        alert(row.id + " " + row.userName)
         let sysName = sessionStorage.getItem("sysName")
-        alert(sysName)
       },
       handleDelete(row){
         axios.delete('/sys_user/deleteUser',{
@@ -214,19 +253,35 @@
             }
           })
       },
-      addUser() {
-        axios.post('/sys_user/addUser', this.AddUserForm)
-          .then(res => {
-            if(res.data.flag === true){
-              this.open = false;
-              this.$message({
-                type:'success',
-                message:res.data.mes
-              })
-              this.search();
-            }
-          })
+      submitForm() {
+        if(!this.flag){
+          axios.post('/sys_user/addUser', this.AddUserForm)
+            .then(res => {
+              if(res.data.flag === true){
+                this.open = false;
+                this.$message({
+                  type:'success',
+                  message:res.data.mes
+                })
+                this.search();
+              }
+            })
+        }else {
+          alert("修改");
+          axios.post('/sys_user/mofidyUser', this.AddUserForm)
+            .then(res => {
+              if(res.data.flag === true){
+                this.open = false;
+                this.$message({
+                  type:'success',
+                  message:res.data.mes
+                })
+                this.search();
+              }
+            })
+        }
       }
+
     }
   }
 </script>

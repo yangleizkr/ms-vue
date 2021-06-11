@@ -1,9 +1,9 @@
 <template>
   <div class="index">
     <el-container style="border: 1px solid #eee;">
-      <el-header style="border: 1px solid #eee;height: 50px">
-        <el-row>
-          <el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+      <el-header style="border: 1px solid #eee;height: 50px ;background-color: #545c64">
+        <el-row >
+          <el-col :span="3" class="logo" style="font-weight: bold;font-size: xx-large ;color: white;">
             {{ collapsed ? '' : sysName }}
           </el-col>
           <el-col :span="10"></el-col>
@@ -35,12 +35,12 @@
               <el-submenu :index="index+''" v-if="!item.leaf">
                 <div slot="title"><i :class="item.iconCls"></i>{{ item.name }}</div>
                 <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">
-                  {{ child.name }}
+                  <i :class="child.iconCls"></i>{{ child.name }}
                 </el-menu-item>
               </el-submenu>
-              <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i
-                :class="item.iconCls"></i>{{ item.children[0].name }}
-              </el-menu-item>
+<!--              <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i-->
+<!--                :class="item.iconCls"></i>{{ item.children[0].name }}-->
+<!--              </el-menu-item>-->
             </div>
           </el-menu>
         </el-aside>
@@ -58,7 +58,7 @@
           </el-row>
         </el-main>
       </el-container>
-      <el-footer style="border: 1px solid #eee ;height: 30px"> © CopyRight 2021-2021 MS MS管理平台</el-footer>
+      <el-footer style="border: 1px solid #eee ;height: 30px"> © CopyRight 2020-2021 MS MS管理平台</el-footer>
 
     </el-container>
   </div>
@@ -74,11 +74,12 @@
         collapsed: false,
         sysName: 'MS管理平台',
         sysUserAvatar: avatar,
-        sysUserName: '123'
+        sysUserName: '姓名'
       }
     },
     created() {
       sessionStorage.setItem("sysName",'MS管理平台');
+      this.sysUserName = sessionStorage.getItem("userName")
     },
     methods: {
       handleOpen() {

@@ -8,6 +8,8 @@ import store from 'store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+
+Vue.config.devtools = true
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 axios.defaults.baseURL = '/api'  //关键代码

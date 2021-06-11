@@ -1,5 +1,6 @@
 package com.yl.ms.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yl.ms.entity.SysUser;
 
@@ -9,8 +10,9 @@ import com.yl.ms.entity.SysUser;
 public interface SysUserService extends IService<SysUser> {
 
 
-    boolean login(SysUser sysUser);
+    SysUser login(SysUser sysUser);
 
+    IPage<SysUser> listUsers(String userCode,String userName,Integer pageNum, Integer pageSize);
 //    User getUserByName(String getMapByName);
 }
 
