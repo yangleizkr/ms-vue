@@ -82,24 +82,27 @@
       </el-pagination>
     </div>
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
-      <el-form :model="AddUserForm">
+      <el-form :model="SubmitForm">
+        <el-form-item label="主键" :label-width="formLabelWidth" disabled="disabled">
+          <el-input v-model="SubmitForm.id" disabled="disabled"></el-input>
+        </el-form-item>
         <el-form-item label="编码" :label-width="formLabelWidth">
-          <el-input v-model="AddUserForm.userCode" autocomplete="off" @blur="checkUserCode"></el-input>
+          <el-input v-model="SubmitForm.userCode" autocomplete="off" @blur="checkUserCode"></el-input>
         </el-form-item>
         <el-form-item label="名称" :label-width="formLabelWidth">
-          <el-input v-model="AddUserForm.userName" autocomplete="off" ></el-input>
+          <el-input v-model="SubmitForm.userName" autocomplete="off" ></el-input>
         </el-form-item>
         <el-form-item label="密码" :label-width="formLabelWidth">
-          <el-input v-model="AddUserForm.password" autocomplete="off"></el-input>
+          <el-input v-model="SubmitForm.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="地址" :label-width="formLabelWidth">
-          <el-input v-model="AddUserForm.address" autocomplete="off"></el-input>
+          <el-input v-model="SubmitForm.address" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" :label-width="formLabelWidth">
-          <el-input v-model="AddUserForm.email" autocomplete="off"></el-input>
+          <el-input v-model="SubmitForm.email" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="手机" :label-width="formLabelWidth">
-          <el-input v-model="AddUserForm.mobile" autocomplete="off"></el-input>
+          <el-input v-model="SubmitForm.mobile" autocomplete="off"></el-input>
         </el-form-item>
 
       </el-form>
@@ -129,7 +132,8 @@
           userName: ''
         },
         flag: false,
-        AddUserForm: {
+        SubmitForm: {
+          id : '',
           userCode: '',
           userName: '',
           password:'',
@@ -151,14 +155,16 @@
     },
     methods: {
       reset(){
-        this.AddUserForm.userCode = undefined
-        this.AddUserForm.userName = undefined
-        this.AddUserForm.password = undefined
-        this.AddUserForm.address = undefined
-        this.AddUserForm.email = undefined
-        this.AddUserForm.mobile = undefined
+        this.SubmitForm.id = undefined
+        this.SubmitForm.userCode = undefined
+        this.SubmitForm.userName = undefined
+        this.SubmitForm.password = undefined
+        this.SubmitForm.address = undefined
+        this.SubmitForm.email = undefined
+        this.SubmitForm.mobile = undefined
       },
       search() {
+        console.log(this.form);
         axios.get('/sys_user/list', {
           params: {
             userCode: this.form.userCode,
@@ -189,7 +195,7 @@
         }
       },
       checkUserCode(){
-        if(this.AddUserForm.userCode == ''){
+        if(this.SubmitForm.userCode == ''){
           this.$message({
             type:'error',
             message:"用户名不能为空"
@@ -197,7 +203,7 @@
         }else {
           axios.get('/sys_user/checkUserCode', {
             params: {
-              userCode: this.AddUserForm.userCode,
+              userCode: this.SubmitForm.userCode,
             }
           }).then(res => {
             if (res.data.flag === true){
@@ -205,7 +211,7 @@
                 type:'error',
                 message:res.data.mes
               })
-              this.AddUserForm.userCode = ''
+              this.SubmitForm.userCode = ''
             }
           })
         }
@@ -220,12 +226,13 @@
         this.reset()
         this.open = true;
         this.title = "修改用户";
-        this.AddUserForm.userCode = row.userCode
-        this.AddUserForm.userName = row.userName
-        this.AddUserForm.password = row.password
-        this.AddUserForm.address = row.address
-        this.AddUserForm.email = row.email
-        this.AddUserForm.mobile = row.mobile
+        this.SubmitForm.id = row.id
+        this.SubmitForm.userCode = row.userCode
+        this.SubmitForm.userName = row.userName
+        this.SubmitForm.password = row.password
+        this.SubmitForm.address = row.address
+        this.SubmitForm.email = row.email
+        this.SubmitForm.mobile = row.mobile
         this.flag = true;
       },
       handleClick(row) {
@@ -255,7 +262,7 @@
       },
       submitForm() {
         if(!this.flag){
-          axios.post('/sys_user/addUser', this.AddUserForm)
+          axios.post('/sys_user/addUser', this.SubmitForm)
             .then(res => {
               if(res.data.flag === true){
                 this.open = false;
@@ -267,8 +274,7 @@
               }
             })
         }else {
-          alert("修改");
-          axios.post('/sys_user/mofidyUser', this.AddUserForm)
+          axios.put('/sys_user/mofidyUser', this.SubmitForm)
             .then(res => {
               if(res.data.flag === true){
                 this.open = false;

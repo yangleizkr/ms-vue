@@ -1,0 +1,13 @@
+package ${packageName}.service;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.yl.ms.entity.${ClassName};
+
+
+public interface ${ClassName}Service extends IService<${ClassName}> {
+
+
+    IPage<${ClassName}> findListPages(${ClassName} selectObject,Integer pageNum, Integer pageSize);
+
+}

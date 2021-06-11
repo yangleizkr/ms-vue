@@ -1,0 +1,33 @@
+package ${packageName}.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import ${packageName}.entity.${ClassName};
+import ${packageName}.dao.${ClassName}Mapper;
+import ${packageName}.service.${ClassName}Service;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import java.util.Objects;
+
+
+@Service
+public interface ${ClassName}ServiceImpl  extends ServiceImpl<${ClassName}Mapper, ${ClassName}> implements ${ClassName}Service{
+
+    @Resource
+    private ${ClassName}Service ${className}SeriviceImpl;
+
+    IPage<${ClassName}> findListPages(${ClassName} selectObject,Integer pageNum, Integer pageSize){
+
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        /**
+        * 添加查询条件
+        */
+
+        Page<ClassName> page = new Page(pageNum,pageSize);
+        IPage<ClassName> iPage = classNameMapper.selectPage(page,queryWrapper);
+        return iPage;
+    }
+
+}

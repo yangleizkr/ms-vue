@@ -65,14 +65,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public IPage<SysUser> listUsers(String userCode, String userName, Integer pageNum, Integer pageSize) {
+    public IPage<SysUser> listUsers(SysUser sysUser, Integer pageNum, Integer pageSize) {
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
 
-        if(!"".equals(userCode)){
-            queryWrapper.eq("user_code",userCode);
+        if(!"".equals(sysUser.getUserCode())){
+            queryWrapper.eq("user_code",sysUser.getUserCode());
         }
-        if (!"".equals(userName)){
-            queryWrapper.like("user_name",userName);
+        if (!"".equals(sysUser.getUserName())){
+            queryWrapper.like("user_name",sysUser.getUserName());
         }
 
         Page<SysUser> page = new Page(pageNum,pageSize);

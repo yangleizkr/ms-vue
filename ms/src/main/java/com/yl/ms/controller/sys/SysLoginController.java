@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -50,13 +49,12 @@ public class SysLoginController {
 
     @GetMapping("/list")
     @ResponseBody
-    public HashMap<String,Object> listsSysUser(HttpServletRequest request,@RequestParam(required = false,value = "pageNum", defaultValue = "1") Integer pageNum,
+    public HashMap<String,Object> listsSysUser(SysUser sysUser,@RequestParam(required = false,value = "pageNum", defaultValue = "1") Integer pageNum,
     @RequestParam(required = false,value = "pageSize",defaultValue = "10") Integer pageSize){
 
         HashMap<String,Object> map = new HashMap<>(4);
-        String userCode = request.getParameter("userCode");
-        String userName = request.getParameter("userName");
-        IPage<SysUser> iPage = sysUserService.listUsers(userCode, userName, pageNum, pageSize);
+
+        IPage<SysUser> iPage = sysUserService.listUsers(sysUser, pageNum, pageSize);
         map.put("iPage",iPage);
         return map;
     }
@@ -113,5 +111,14 @@ public class SysLoginController {
 
         return map;
     }
+    @PutMapping("/mofidyUser")
+    @ResponseBody
+    public HashMap<String,Object> modifySysUser(@RequestBody SysUser sysUser){
+        HashMap<String,Object> map = new HashMap<>(4);
+        boolean flag = sysUserService.updateById(sysUser);
+        map.put("flag",flag);
+        return map;
+    }
+
 }
 
