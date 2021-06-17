@@ -39,7 +39,7 @@ public class ${ClassName}Controller {
         return map;
     }
 
-
+    
     @PostMapping("/add${ClassName}")
     @Transactional
     @ResponseBody

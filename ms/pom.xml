@@ -70,6 +70,16 @@
             <artifactId>sa-token-spring-boot-starter</artifactId>
             <version>1.19.0</version>
         </dependency>
+        <!-- validator校验器 -->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
         <!-- sa-token整合SpringAOP实现注解鉴权 -->
         <dependency>
             <groupId>cn.dev33</groupId>

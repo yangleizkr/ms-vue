@@ -5,11 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.yl.ms.entity.SysUser;
 import com.yl.ms.service.SysUserService;
 import com.yl.ms.utils.PasswordUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -21,102 +22,110 @@ import java.util.Objects;
 
 @RequestMapping("/sys_user")
 @Controller
-public class SysLoginController {
+public class SysLoginController extends BaseController {
 
-    @Autowired
+    @Resource
     private SysUserService sysUserService;
 
     /**
      * optimize
-     * @param sysUser
-     * @return
+     *
+     * @param sysUser 用户
+     * @return 返回Json对象
      */
     @PostMapping("/login")
     @ResponseBody
-    public HashMap<String,Object> loginSystem(@RequestBody SysUser sysUser){
-        HashMap<String,Object> map = new HashMap<>(4);
-        SysUser findedSysUser = sysUserService.login(sysUser);
-        if(!Objects.isNull(findedSysUser)){
-            map.put("flag",true);
-            map.put("mes","登陆成功");
-            map.put("sysUser",findedSysUser);
+    public HashMap<String, Object> loginSystem(@RequestBody SysUser sysUser) {
+        HashMap<String, Object> map = new HashMap<>(4);
+        SysUser fundedSysUser = sysUserService.login(sysUser);
+        if (!Objects.isNull(fundedSysUser)) {
+            map.put("flag", true);
+            map.put("mes", "登陆成功");
+            map.put("sysUser", fundedSysUser);
             return map;
         }
-        map.put("flag",false);
-        map.put("mes","账号或密码不正确,请重新输入");
+        map.put("flag", false);
+        map.put("mes", "账号或密码不正确,请重新输入");
         return map;
     }
 
     @GetMapping("/list")
     @ResponseBody
-    public HashMap<String,Object> listsSysUser(SysUser sysUser,@RequestParam(required = false,value = "pageNum", defaultValue = "1") Integer pageNum,
-    @RequestParam(required = false,value = "pageSize",defaultValue = "10") Integer pageSize){
+    public HashMap<String, Object> listsSysUser(SysUser sysUser, @RequestParam(required = false, value = "pageNum", defaultValue = "1") Integer pageNum,
+                                                @RequestParam(required = false, value = "pageSize", defaultValue = "10") Integer pageSize) {
 
-        HashMap<String,Object> map = new HashMap<>(4);
+        HashMap<String, Object> map = new HashMap<>(4);
 
         IPage<SysUser> iPage = sysUserService.listUsers(sysUser, pageNum, pageSize);
-        map.put("iPage",iPage);
+        map.put("iPage", iPage);
         return map;
     }
+
     @GetMapping("/checkUserCode")
     @ResponseBody
-    public HashMap<String,Object> checkUserCode(@RequestParam(value = "userCode") String userCode){
-        HashMap<String,Object> map = new HashMap<>(4);
+    public HashMap<String, Object> checkUserCode(@RequestParam(value = "userCode") String userCode) {
+        HashMap<String, Object> map = new HashMap<>(4);
 
-            QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-            if(!"".equals(userCode)){
-                queryWrapper.eq("user_code",userCode);
-            }
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        if (!"".equals(userCode)) {
+            queryWrapper.eq("user_code", userCode);
+        }
 
-            List<SysUser> list = sysUserService.list(queryWrapper);
-            if (list.size() > 0 ){
-                map.put("flag",true);
-                map.put("mes","已存在");
-                return map;
-            }
-            map.put("flag",false);
+        List<SysUser> list = sysUserService.list(queryWrapper);
+        if (list.size() > 0) {
+            map.put("flag", true);
+            map.put("mes", "已存在");
             return map;
+        }
+        map.put("flag", false);
+        return map;
 
     }
 
     @PostMapping("/addUser")
-    @Transactional
     @ResponseBody
-    public HashMap<String,Object> addSysUser(@RequestBody SysUser sysUser){
-        HashMap<String,Object> map = new HashMap<>(4);
+    public HashMap<String, Object> addSysUser(@RequestBody @Valid SysUser sysUser, BindingResult result) {
+        HashMap<String, Object> map = new HashMap<>(4);
+        if (result.hasErrors()) {
+            return checkObject(map, result);
+        }
         sysUser.setStatus("1");
         sysUser.setPassword(PasswordUtils.digestPassword(sysUser.getPassword()));
         boolean flag = sysUserService.save(sysUser);
-        map.put("flag",flag);
-        map.put("mes","添加成功");
+        map.put("flag", flag);
+        map.put("mes", "添加成功");
         return map;
     }
-    @DeleteMapping("/deleteUser")
-    @ResponseBody
-    public HashMap<String,Object> deleteSysUser(Integer id){
-        System.out.println(id);
-        HashMap<String,Object> map = new HashMap<>(4);
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("id",id);
-        SysUser one = sysUserService.getOne(queryWrapper);
-        if (Objects.isNull(one)){
-            map.put("flag",false);
-            map.put("mes","未查询到该用户");
 
-        }else {
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public HashMap<String, Object> deleteSysUser(@PathVariable Integer id) {
+        HashMap<String, Object> map = new HashMap<>(4);
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", id);
+        SysUser one = sysUserService.getOne(queryWrapper);
+        if (Objects.isNull(one)) {
+            map.put("flag", false);
+            map.put("mes", "未查询到该用户");
+
+        } else {
             sysUserService.remove(queryWrapper);
-            map.put("flag",true);
-            map.put("mes","删除成功");
+            map.put("flag", true);
+            map.put("mes", "删除成功");
         }
 
         return map;
     }
-    @PutMapping("/mofidyUser")
+
+    @PutMapping("/modifyUser")
     @ResponseBody
-    public HashMap<String,Object> modifySysUser(@RequestBody SysUser sysUser){
-        HashMap<String,Object> map = new HashMap<>(4);
+    public HashMap<String, Object> modifySysUser(@RequestBody @Valid SysUser sysUser, BindingResult result) {
+        HashMap<String, Object> map = new HashMap<>(4);
+        if (result.hasErrors()) {
+            return checkObject(map, result);
+        }
         boolean flag = sysUserService.updateById(sysUser);
-        map.put("flag",flag);
+        map.put("flag", flag);
         return map;
     }
 

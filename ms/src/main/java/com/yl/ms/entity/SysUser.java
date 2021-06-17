@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 
 /**
  * 用户信息表
@@ -31,6 +34,7 @@ public class SysUser {
      * 用户名称
      */
     @TableField(value = "user_name")
+    @NotBlank(message = "用户名称不能为空")
     private String userName;
 
     /**
@@ -43,6 +47,7 @@ public class SysUser {
      * 邮箱
      */
     @TableField(value = "email")
+    @Email(regexp = "^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$",message = "邮箱填写不符合规则")
     private String email;
 
     /**

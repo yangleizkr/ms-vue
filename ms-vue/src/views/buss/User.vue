@@ -92,8 +92,8 @@
         <el-form-item label="名称" :label-width="formLabelWidth">
           <el-input v-model="SubmitForm.userName" autocomplete="off" ></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth">
-          <el-input v-model="SubmitForm.password" autocomplete="off"></el-input>
+        <el-form-item label="密码" :label-width="formLabelWidth" v-show="isShow">
+          <el-input v-model="SubmitForm.password" autocomplete="off" type="password"></el-input>
         </el-form-item>
         <el-form-item label="地址" :label-width="formLabelWidth">
           <el-input v-model="SubmitForm.address" autocomplete="off"></el-input>
@@ -118,6 +118,7 @@
 
 <script>
   import axios from "axios";
+  import {listUser, addUser, updateUser, delUser} from "@/api/system/user";
 
   export default {
     name: "User",
@@ -132,6 +133,7 @@
           userName: ''
         },
         flag: false,
+        isShow:false,
         SubmitForm: {
           id : '',
           userCode: '',
@@ -164,18 +166,17 @@
         this.SubmitForm.mobile = undefined
       },
       search() {
-        console.log(this.form);
-        axios.get('/sys_user/list', {
-          params: {
-            userCode: this.form.userCode,
-            userName: this.form.userName,
-            pageNum : this.pageNum,
-            pageSize: this.pageSize
-          }
-        }).then(res => {
+        //使用user.js的API
+        listUser({
+          userCode: this.form.userCode,
+          userName: this.form.userName,
+          pageNum : this.pageNum,
+          pageSize: this.pageSize
+        }).then(res =>{
           this.userData = res.data.iPage.records;
           this.total = res.data.iPage.total;
         })
+
       },
       handleSizeChange(val) {
         this.pageSize = val;
@@ -219,12 +220,14 @@
       showDialog() {
         this.reset()
         this.open = true;
+        this.isShow = true;
         this.title = "新增用户"
         this.flag = false;
       },
       modifyUser(row) {
         this.reset()
         this.open = true;
+        this.isShow = false;
         this.title = "修改用户";
         this.SubmitForm.id = row.id
         this.SubmitForm.userCode = row.userCode
@@ -240,11 +243,25 @@
         let sysName = sessionStorage.getItem("sysName")
       },
       handleDelete(row){
-        axios.delete('/sys_user/deleteUser',{
-          params:{
-            id : row.id
+        delUser(row.id).then(res=>{
+          if(res.data.flag === true){
+            this.open = false;
+            this.$message({
+              type:'success',
+              message:res.data.mes
+            })
+            this.search();
+          }else {
+            this.$message({
+              type:'error',
+              message:res.data.mes
+            })
           }
-        }).then(res => {
+        })
+      },
+      submitForm() {
+        if(!this.flag){
+          addUser(this.SubmitForm).then(res=>{
             if(res.data.flag === true){
               this.open = false;
               this.$message({
@@ -253,38 +270,25 @@
               })
               this.search();
             }else {
+              this.open = false;
               this.$message({
                 type:'error',
                 message:res.data.mes
               })
+              this.search();
             }
           })
-      },
-      submitForm() {
-        if(!this.flag){
-          axios.post('/sys_user/addUser', this.SubmitForm)
-            .then(res => {
-              if(res.data.flag === true){
-                this.open = false;
-                this.$message({
-                  type:'success',
-                  message:res.data.mes
-                })
-                this.search();
-              }
-            })
         }else {
-          axios.put('/sys_user/mofidyUser', this.SubmitForm)
-            .then(res => {
-              if(res.data.flag === true){
-                this.open = false;
-                this.$message({
-                  type:'success',
-                  message:res.data.mes
-                })
-                this.search();
-              }
-            })
+          updateUser(this.SubmitForm).then(res =>{
+            if(res.data.flag === true){
+              this.open = false;
+              this.$message({
+                type:'success',
+                message:res.data.mes
+              })
+              this.search();
+            }
+          })
         }
       }
 

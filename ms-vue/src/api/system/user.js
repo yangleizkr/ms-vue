@@ -1,20 +1,44 @@
 import axios from "axios";
+import request from "../../utils/request";
 
 // 查询用户列表
-export const listUser = params => {return axios.get('/system/user/list',{params:params})}
+export const listUser = params => {return axios.get('/sys_user/list',{params:params})}
 
-// 查询用户详细
-export const getUser = params => {return axios.get('/system/user',{params:params})}
+// 查询用户列表
+export function getUser(params){
+  return request({
+    url: '/system/user',
+    method: 'get',
+    params:params
+  })
+}
 
 // 新增用户
-export const addUser = params => {return axios.post('/system/user',{params:params})}
+export function addUser(data){
+  return request({
+    url: '/sys_user/addUser',
+    method: 'post',
+    data:data
+  })
+}
 
 // 修改用户
-export const updateUser = params => {return axios.put('/system/user',{params:params})}
+export function updateUser(data){
+  return request({
+    url: "/sys_user/modifyUser",
+    method: "put",
+    data:data
+  })
+}
 
 
 // 删除用户
-export const delUser = params => {return axios.delete('/system/user',{params:params})}
+export function delUser(id){
+  return request({
+    url: '/sys_user/'+id,
+    method: 'delete',
+  })
+}
 
 
 // 导出用户
