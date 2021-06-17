@@ -66,6 +66,11 @@ let routes = [
         component: () => import('../views/buss/log')
       }
     ]
+  },{
+    // 首页
+    path: '/myMsg',
+    name: '我的信息',
+    component: () => import('../views/buss/myMsg')
   }
 
 ]
