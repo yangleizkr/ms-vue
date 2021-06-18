@@ -82,26 +82,26 @@
       </el-pagination>
     </div>
     <el-dialog :title="title" :visible.sync="open" width="780px" append-to-body>
-      <el-form :model="SubmitForm">
+      <el-form :model="SubmitForm" :rules="rules" ref="SubmitForm">
         <el-form-item label="主键" :label-width="formLabelWidth" disabled="disabled">
           <el-input v-model="SubmitForm.id" disabled="disabled"></el-input>
         </el-form-item>
-        <el-form-item label="编码" :label-width="formLabelWidth">
-          <el-input v-model="SubmitForm.userCode" autocomplete="off" @blur="checkUserCode"></el-input>
+        <el-form-item label="编码" prop="userCode" :label-width="formLabelWidth">
+          <el-input v-model="SubmitForm.userCode" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="名称" prop="userName" :label-width="formLabelWidth">
           <el-input v-model="SubmitForm.userName" autocomplete="off" ></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth" v-show="isShow">
+        <el-form-item label="密码" prop="password" :label-width="formLabelWidth" v-show="isShow">
           <el-input v-model="SubmitForm.password" autocomplete="off" type="password"></el-input>
         </el-form-item>
         <el-form-item label="地址" :label-width="formLabelWidth">
           <el-input v-model="SubmitForm.address" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" :label-width="formLabelWidth">
+        <el-form-item label="邮箱" prop="email" :label-width="formLabelWidth">
           <el-input v-model="SubmitForm.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="手机" :label-width="formLabelWidth">
+        <el-form-item label="手机" prop="mobile" :label-width="formLabelWidth">
           <el-input v-model="SubmitForm.mobile" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -109,7 +109,7 @@
       <template #footer>
     <span class="dialog-footer">
       <el-button @click="open = false">取 消</el-button>
-      <el-button type="primary" @click="submitForm">提 交</el-button>
+      <el-button type="primary" @click="submitForm('SubmitForm')">提 交</el-button>
     </span>
       </template>
     </el-dialog>
@@ -149,7 +149,23 @@
         userList: '',
         currentPage4:1,
         total:0,
-        pageInfo:[]
+        pageInfo:[],
+
+        // 表单验证，需要在 el-form-item 元素中增加 prop 属性
+        rules:{
+          userCode:[
+            {required:true,message:'用户编码不能为空',trigger: 'change'},
+            { min: 2, max: 30, message: "长度在 2 到 30 个字符" }
+          ],
+          email: [
+            {
+              type: 'email',
+              required: true,
+              message: '邮箱格式不正确',
+              trigger: 'blur'
+            }
+          ]
+        },
       }
     },
     mounted() {
@@ -195,28 +211,6 @@
           this.form.userName = ''
         }
       },
-      checkUserCode(){
-        if(this.SubmitForm.userCode == ''){
-          this.$message({
-            type:'error',
-            message:"用户名不能为空"
-          })
-        }else {
-          axios.get('/sys_user/checkUserCode', {
-            params: {
-              userCode: this.SubmitForm.userCode,
-            }
-          }).then(res => {
-            if (res.data.flag === true){
-              this.$message({
-                type:'error',
-                message:res.data.mes
-              })
-              this.SubmitForm.userCode = ''
-            }
-          })
-        }
-      },
       showDialog() {
         this.reset()
         this.open = true;
@@ -259,37 +253,43 @@
           }
         })
       },
-      submitForm() {
-        if(!this.flag){
-          addUser(this.SubmitForm).then(res=>{
-            if(res.data.flag === true){
-              this.open = false;
-              this.$message({
-                type:'success',
-                message:res.data.mes
+      submitForm(formName) {
+        this.$refs[formName].validate((valid) => {
+          if(valid){
+            if(!this.flag){
+              addUser(this.SubmitForm).then(res=>{
+                if(res.data.flag === true){
+                  this.open = false;
+                  this.$message({
+                    type:'success',
+                    message:res.data.mes
+                  })
+                  this.search();
+                }else {
+                  this.open = false;
+                  this.$message({
+                    type:'error',
+                    message:res.data.mes
+                  })
+                  this.search();
+                }
               })
-              this.search();
             }else {
-              this.open = false;
-              this.$message({
-                type:'error',
-                message:res.data.mes
+              updateUser(this.SubmitForm).then(res =>{
+                if(res.data.flag === true){
+                  this.open = false;
+                  this.$message({
+                    type:'success',
+                    message:res.data.mes
+                  })
+                  this.search();
+                }
               })
-              this.search();
             }
-          })
-        }else {
-          updateUser(this.SubmitForm).then(res =>{
-            if(res.data.flag === true){
-              this.open = false;
-              this.$message({
-                type:'success',
-                message:res.data.mes
-              })
-              this.search();
-            }
-          })
-        }
+          }else{
+
+          }
+        })
       }
 
     }

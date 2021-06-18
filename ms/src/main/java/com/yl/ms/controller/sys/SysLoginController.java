@@ -73,11 +73,11 @@ public class SysLoginController extends BaseController {
 
         List<SysUser> list = sysUserService.list(queryWrapper);
         if (list.size() > 0) {
-            map.put("flag", true);
-            map.put("mes", "已存在");
+            map.put("flag", false);
+            map.put("mes", "用户名已存在");
             return map;
         }
-        map.put("flag", false);
+        map.put("flag", true);
         return map;
 
     }
@@ -88,6 +88,10 @@ public class SysLoginController extends BaseController {
         HashMap<String, Object> map = new HashMap<>(4);
         if (result.hasErrors()) {
             return checkObject(map, result);
+        }
+        HashMap<String, Object> map1 = this.checkUserCode(sysUser.getUserCode());
+        if ((Boolean) map1.get("flag") == false){
+            return map1;
         }
         sysUser.setStatus("1");
         sysUser.setPassword(PasswordUtils.digestPassword(sysUser.getPassword()));
