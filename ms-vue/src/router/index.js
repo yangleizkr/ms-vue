@@ -67,9 +67,10 @@ let routes = [
       }
     ]
   },{
-    // 首页
+    //个人信息
     path: '/myMsg',
     name: '我的信息',
+    hidden:true,
     component: () => import('../views/buss/myMsg')
   }
 
