@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yl.ms.dao.SysPermissionMapper">
+  <resultMap id="BaseResultMap" type="com.yl.ms.entity.SysPermission">
+    <!--@mbg.generated-->
+    <!--@Table sys_permission-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="permission_type" jdbcType="VARCHAR" property="permissionType" />
+    <result column="permission_code" jdbcType="VARCHAR" property="permissionCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, permission_id, permission_type, permission_code
+  </sql>
+</mapper>

@@ -1,9 +1,9 @@
 package com.yl.ms.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.yl.ms.entity.SysUser;
+import com.yl.ms.entity.SysRoleMenuReal;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface SysUserMapper extends BaseMapper<SysUser> {
+public interface SysRoleMenuRealMapper extends BaseMapper<SysRoleMenuReal> {
 }

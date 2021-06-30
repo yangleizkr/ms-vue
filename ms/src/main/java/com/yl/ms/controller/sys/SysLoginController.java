@@ -1,8 +1,11 @@
 package com.yl.ms.controller.sys;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.yl.ms.entity.SysMenu;
 import com.yl.ms.entity.SysUser;
+import com.yl.ms.service.SysMenuService;
 import com.yl.ms.service.SysUserService;
 import com.yl.ms.utils.PasswordUtils;
 import org.springframework.stereotype.Controller;
@@ -27,6 +30,10 @@ public class SysLoginController extends BaseController {
     @Resource
     private SysUserService sysUserService;
 
+    @Resource
+    private SysMenuService sysMenuService;
+
+
     /**
      * optimize
      *
@@ -41,6 +48,7 @@ public class SysLoginController extends BaseController {
         if (!Objects.isNull(fundedSysUser)) {
             map.put("flag", true);
             map.put("mes", "登陆成功");
+            StpUtil.setLoginId(sysUser.getUserCode());
             map.put("sysUser", fundedSysUser);
             return map;
         }
@@ -130,6 +138,17 @@ public class SysLoginController extends BaseController {
         }
         boolean flag = sysUserService.updateById(sysUser);
         map.put("flag", flag);
+        return map;
+    }
+    @GetMapping("/getRouters")
+    @ResponseBody
+    public HashMap<String,Object> getMenus(){
+        HashMap<String, Object> map = new HashMap<>(4);
+        String userCode = (String)StpUtil.getLoginId();
+        List<SysMenu> allByMenuCode = sysMenuService.findAllByUserCode(userCode);
+        map.put("flag",true);
+        map.put("menu",allByMenuCode);
+        map.put("userCode",userCode);
         return map;
     }
 

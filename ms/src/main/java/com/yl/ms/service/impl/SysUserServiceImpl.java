@@ -28,9 +28,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private StringRedisTemplate stringRedisTemplate;
 
 
-    public void test(){
-        stringRedisTemplate.opsForValue().set("123","测试");
-        stringRedisTemplate.expire("123",1000, TimeUnit.SECONDS);
+    public void test() {
+        stringRedisTemplate.opsForValue().set("123", "测试");
+        stringRedisTemplate.expire("123", 1000, TimeUnit.SECONDS);
     }
 
     /**
@@ -40,26 +40,23 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public SysUser login(SysUser sysUser) {
-        if(Objects.isNull(sysUser)){
+        if (Objects.isNull(sysUser)) {
             System.out.println("传入用户为空");
             return null;
         }
 
-        stringRedisTemplate.opsForValue().set("123","测试");
-        stringRedisTemplate.expire("123",1000, TimeUnit.SECONDS);
+        stringRedisTemplate.opsForValue().set("123", "测试");
+        stringRedisTemplate.expire("123", 1000, TimeUnit.SECONDS);
 
         QueryWrapper<SysUser> sysUserQueryWrapper = new QueryWrapper<>();
-        sysUserQueryWrapper.eq("user_code",sysUser.getUserCode());
+        sysUserQueryWrapper.eq("user_code", sysUser.getUserCode());
         SysUser findedUser = sysUserMapper.selectOne(sysUserQueryWrapper);
-        if(Objects.isNull(findedUser)){
-            System.out.println("该用户不存在!");
+        if (Objects.isNull(findedUser)) {
             return null;
         }
-        if (Objects.equals(findedUser.getPassword(), PasswordUtils.digestPassword(sysUser.getPassword()))){
-            System.out.println("密码匹配成功");
+        if (Objects.equals(findedUser.getPassword(), PasswordUtils.digestPassword(sysUser.getPassword()))) {
             return findedUser;
         }
-
 
         return null;
     }
@@ -68,17 +65,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public IPage<SysUser> listUsers(SysUser sysUser, Integer pageNum, Integer pageSize) {
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
 
-        if(!"".equals(sysUser.getUserCode())){
-            queryWrapper.eq("user_code",sysUser.getUserCode());
+        if (!"".equals(sysUser.getUserCode())) {
+            queryWrapper.eq("user_code", sysUser.getUserCode());
         }
-        if (!"".equals(sysUser.getUserName())){
-            queryWrapper.like("user_name",sysUser.getUserName());
+        if (!"".equals(sysUser.getUserName())) {
+            queryWrapper.like("user_name", sysUser.getUserName());
         }
 
-        Page<SysUser> page = new Page(pageNum,pageSize);
-        IPage<SysUser> iPage = sysUserMapper.selectPage(page,queryWrapper);
+        Page<SysUser> page = new Page(pageNum, pageSize);
+        IPage<SysUser> iPage = sysUserMapper.selectPage(page, queryWrapper);
         return iPage;
     }
 
 }
+
+
 

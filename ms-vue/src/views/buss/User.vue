@@ -61,9 +61,9 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="130">
+        width="170">
         <template #default="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+          <el-button @click="handleClick(scope.row)" type="text" size="small">分配角色</el-button>
           <el-button type="text" size="small" @click="modifyUser(scope.row,true)">编辑</el-button>
           <el-button @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
         </template>

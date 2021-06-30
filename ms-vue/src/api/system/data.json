@@ -1,0 +1,334 @@
+{
+  "code": 0,
+  "menus": [
+    {
+      "name": "System",
+      "path": "system",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统管理",
+        "icon": "system"
+      },
+      "children": [
+        {
+          "name": "User",
+          "path": "user",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/user/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "用户管理",
+            "icon": "user"
+          },
+          "children": null
+        },
+        {
+          "name": "Role",
+          "path": "role",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/role/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "角色管理",
+            "icon": "peoples"
+          },
+          "children": null
+        },
+        {
+          "name": "Menu",
+          "path": "menu",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/menu/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "菜单管理",
+            "icon": "tree-table"
+          },
+          "children": null
+        },
+        {
+          "name": "Dept",
+          "path": "dept",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/dept/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "部门管理",
+            "icon": "tree"
+          },
+          "children": null
+        },
+        {
+          "name": "Post",
+          "path": "post",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/post/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "岗位管理",
+            "icon": "post"
+          },
+          "children": null
+        },
+        {
+          "name": "Dict",
+          "path": "dict",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/dict/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "字典管理",
+            "icon": "dict"
+          },
+          "children": null
+        },
+        {
+          "name": "Config",
+          "path": "config",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/config/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "参数设置",
+            "icon": "edit"
+          },
+          "children": null
+        },
+        {
+          "name": "Notice",
+          "path": "notice",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/notice/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "通知公告",
+            "icon": "message"
+          },
+          "children": null
+        },
+        {
+          "name": "Log",
+          "path": "log",
+          "hidden": false,
+          "redirect": "noRedirect",
+          "component": "system/log/index",
+          "alwaysShow": true,
+          "meta": {
+            "title": "日志管理",
+            "icon": "log"
+          },
+          "children": [
+            {
+              "name": "Operlog",
+              "path": "operlog",
+              "hidden": false,
+              "redirect": null,
+              "component": "monitor/operlog/index",
+              "alwaysShow": null,
+              "meta": {
+                "title": "操作日志",
+                "icon": "form"
+              },
+              "children": null
+            },
+            {
+              "name": "Logininfor",
+              "path": "logininfor",
+              "hidden": false,
+              "redirect": null,
+              "component": "monitor/logininfor/index",
+              "alwaysShow": null,
+              "meta": {
+                "title": "登录日志",
+                "icon": "logininfor"
+              },
+              "children": null
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "path": "user",
+      "hidden": false,
+      "redirect": null,
+      "component": "Layout",
+      "alwaysShow": null,
+      "meta": {
+        "title": "测试新增",
+        "icon": "system"
+      },
+      "children": null
+    },
+    {
+      "name": "Monitor",
+      "path": "monitor",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统监控",
+        "icon": "monitor"
+      },
+      "children": [
+        {
+          "name": "Online",
+          "path": "online",
+          "hidden": false,
+          "redirect": null,
+          "component": "monitor/online/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "在线用户",
+            "icon": "online"
+          },
+          "children": null
+        },
+        {
+          "name": "Job",
+          "path": "job",
+          "hidden": false,
+          "redirect": null,
+          "component": "monitor/job/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "定时任务",
+            "icon": "job"
+          },
+          "children": null
+        },
+        {
+          "name": "Druid",
+          "path": "druid",
+          "hidden": false,
+          "redirect": null,
+          "component": "monitor/druid/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "数据监控",
+            "icon": "druid"
+          },
+          "children": null
+        },
+        {
+          "name": "Server",
+          "path": "server",
+          "hidden": false,
+          "redirect": null,
+          "component": "monitor/server/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "服务监控",
+            "icon": "server"
+          },
+          "children": null
+        }
+      ]
+    },
+    {
+      "name": "Tool",
+      "path": "tool",
+      "hidden": false,
+      "redirect": "noRedirect",
+      "component": "Layout",
+      "alwaysShow": true,
+      "meta": {
+        "title": "系统工具",
+        "icon": "tool"
+      },
+      "children": [
+        {
+          "name": "Book",
+          "path": "book",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/book/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "图书",
+            "icon": "#"
+          },
+          "children": null
+        },
+        {
+          "name": "Ldcode",
+          "path": "ldcode",
+          "hidden": false,
+          "redirect": null,
+          "component": "system/ldcode/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "代码表",
+            "icon": "#"
+          },
+          "children": null
+        },
+        {
+          "name": "Build",
+          "path": "build",
+          "hidden": false,
+          "redirect": null,
+          "component": "tool/build/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "表单构建",
+            "icon": "build"
+          },
+          "children": null
+        },
+        {
+          "name": "Gen",
+          "path": "gen",
+          "hidden": false,
+          "redirect": null,
+          "component": "tool/gen/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "代码生成",
+            "icon": "code"
+          },
+          "children": null
+        },
+        {
+          "name": "Swagger",
+          "path": "swagger",
+          "hidden": false,
+          "redirect": null,
+          "component": "tool/swagger/index",
+          "alwaysShow": null,
+          "meta": {
+            "title": "系统接口",
+            "icon": "swagger"
+          },
+          "children": null
+        }
+      ]
+    },
+    {
+      "name": "Http://ruoyi.vip",
+      "path": "http://ruoyi.vip",
+      "hidden": false,
+      "redirect": null,
+      "component": "Layout",
+      "alwaysShow": null,
+      "meta": {
+        "title": "若依官网",
+        "icon": "guide"
+      },
+      "children": null
+    }
+  ]
+}

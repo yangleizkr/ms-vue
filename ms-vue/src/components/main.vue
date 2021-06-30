@@ -1,6 +1,6 @@
 <template>
   <div class="index">
-    <el-container style="border: 1px solid #eee;">
+    <el-container style="border: 1px solid #eee; " >
       <el-header style="border: 1px solid #eee;height: 50px ;background-color: #545c64">
         <el-row >
           <el-col :span="3" class="logo" style="font-weight: bold;font-size: xx-large ;color: white;">
@@ -27,20 +27,24 @@
             @open="handleOpen"
             @close="handleClose"
             @select="handleselect"
-            unique-opened router
+            unique-opened
+            router
             background-color="#545c64"
             text-color="#fff"
             active-text-color="#ffd04b">
-            <div v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
+<!--            <div v-for="(item,index) in $router.options.routes" v-if="!item.hidden">-->
+            <div v-for="(item,index) in $store.state.route" v-if="!item.hidden">
               <el-submenu :index="index+''" v-if="!item.leaf">
                 <div slot="title"><i :class="item.iconCls"></i>{{ item.name }}</div>
                 <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">
                   <i :class="child.iconCls"></i>{{ child.name }}
                 </el-menu-item>
               </el-submenu>
-<!--              <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i-->
-<!--                :class="item.iconCls"></i>{{ item.children[0].name }}-->
-<!--              </el-menu-item>-->
+              <el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path"><i
+                :class="item.iconCls"></i>{{ item.children[0].name }}
+              </el-menu-item>
+
+
             </div>
           </el-menu>
         </el-aside>
@@ -54,7 +58,7 @@
           </el-row>
 
           <el-row style="border: 1px solid #eee;">
-            <router-view></router-view>
+            <router-view/>
           </el-row>
         </el-main>
       </el-container>
@@ -74,7 +78,9 @@
         collapsed: false,
         sysName: 'MS管理平台',
         sysUserAvatar: avatar,
-        sysUserName: '姓名'
+        sysUserName: '姓名',
+        menuList:[],
+        isCollapse:true
       }
     },
     created() {
@@ -92,7 +98,12 @@
 
       },
       logout() {
-        this.$router.push("/");
+        this.$router.push("/login");
+        sessionStorage.removeItem("userName")
+        sessionStorage.removeItem("userCode")
+        this.$store.state.route = []
+        this.$store.state.reRoute = []
+
       },
       myMsg() {
         this.$router.push("/myMsg");

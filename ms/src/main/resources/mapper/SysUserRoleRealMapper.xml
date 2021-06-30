@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yl.ms.dao.SysUserRoleRealMapper">
+  <resultMap id="BaseResultMap" type="com.yl.ms.entity.SysUserRoleReal">
+    <!--@mbg.generated-->
+    <!--@Table sys_user_role_real-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_code" jdbcType="VARCHAR" property="userCode" />
+    <result column="role_code" jdbcType="VARCHAR" property="roleCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_code, role_code
+  </sql>
+</mapper>

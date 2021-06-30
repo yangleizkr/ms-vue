@@ -8,15 +8,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
-    * 系统菜单表
- * @author yl
+ * 系统菜单表
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "sys_menu")
 public class SysMenu {
+    public static final String COL_COMPONENT = "component";
     /**
      * 自增主键
      */
@@ -59,6 +61,34 @@ public class SysMenu {
     @TableField(value = "next_code")
     private String nextCode;
 
+    /**
+     * 是否隐藏组件
+     */
+    @TableField(value = "hidden")
+    private Boolean hidden;
+
+    /**
+     * 组件地址
+     */
+    @TableField(value = "componentName")
+    private String componentname;
+
+    /**
+     * 图标
+     */
+    @TableField(value = "iconCls")
+    private String iconcls;
+
+    public List<SysMenu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysMenu> children) {
+        this.children = children;
+    }
+    @TableField(exist = false)
+    private List<SysMenu> children;
+
     public static final String COL_ID = "id";
 
     public static final String COL_MENU_CODE = "menu_code";
@@ -72,4 +102,10 @@ public class SysMenu {
     public static final String COL_PRE_CODE = "pre_code";
 
     public static final String COL_NEXT_CODE = "next_code";
+
+    public static final String COL_HIDDEN = "hidden";
+
+    public static final String COL_COMPONENTNAME = "componentName";
+
+    public static final String COL_ICONCLS = "iconCls";
 }

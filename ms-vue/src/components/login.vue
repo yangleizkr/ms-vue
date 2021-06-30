@@ -21,6 +21,7 @@
       <span>请输入账号和密码</span>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+
       </span>
     </el-dialog>
   </div>
@@ -29,14 +30,13 @@
 <script>
 
 export default {
-  name: 'HelloWorld',
+  name: 'login',
   data() {
     return {
       form: {
         userCode: 'admin',
         password: '123456'
       },
-
       // 表单验证，需要在 el-form-item 元素中增加 prop 属性
       rules: {
         userCode: [
@@ -62,9 +62,10 @@ export default {
                   type:'success',
                   message:response.data.mes
                 })
-                this.$router.push("/main");
-
+                sessionStorage.setItem("loginData","true");
                 sessionStorage.setItem("userName",response.data.sysUser.userName);
+                sessionStorage.setItem("userCode",response.data.sysUser.userCode);
+                this.$router.push({path:"/main"});
                 // sessionStorage.setItem("sysUserAvatar",response.data.sysUser.avatar);
 
               }else {

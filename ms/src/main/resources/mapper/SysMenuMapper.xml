@@ -11,13 +11,33 @@
     <result column="parent_code" jdbcType="VARCHAR" property="parentCode" />
     <result column="pre_code" jdbcType="VARCHAR" property="preCode" />
     <result column="next_code" jdbcType="VARCHAR" property="nextCode" />
+    <result column="hidden" jdbcType="BOOLEAN" property="hidden" />
+    <result column="componentName" jdbcType="VARCHAR" property="componentname" />
+    <result column="iconCls" jdbcType="VARCHAR" property="iconcls" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, menu_code, menu_name, menu_url, parent_code, pre_code, next_code
+    id, menu_code, menu_name, menu_url, parent_code, pre_code, next_code, hidden, componentName,
+    iconCls
   </sql>
 
-  <select id="selectAllByMenuCode" resultMap="BaseResultMap">
-        select * from sys_menu where menu_code = '123'
+  <select id="selectAllByUserCode" resultMap="BaseResultMap">
+    select a.menu_code, menu_name, menu_url, hidden, componentName,iconCls from
+    sys_menu a  inner join sys_role_menu_real b on a.menu_code = b.menu_code
+    inner join sys_role sr on b.role_code = sr.role_code
+    inner join sys_user_role_real surr on b.role_code = surr.role_code
+    inner join sys_user su on surr.user_code = su.user_code
+    where su.user_code = #{userCode}
+    and parent_code = '00000';
+  </select>
+
+  <select id="selectChildren" resultMap="BaseResultMap">
+    select a.menu_code, menu_name, menu_url, hidden, componentName,iconCls from
+    sys_menu a  inner join sys_role_menu_real b on a.menu_code = b.menu_code
+    inner join sys_role sr on b.role_code = sr.role_code
+    inner join sys_user_role_real surr on b.role_code = surr.role_code
+    inner join sys_user su on surr.user_code = su.user_code
+    where su.user_code = #{userCode}
+    and parent_code = #{menuCode};
   </select>
 </mapper>
